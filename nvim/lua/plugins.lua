@@ -45,6 +45,7 @@ return require('packer').startup(function(use)
     config = profile.telescope.config
   }
 
+  -- Project file explorer
   use {
     'nvim-neo-tree/neo-tree.nvim',
     requires = {
@@ -79,15 +80,16 @@ return require('packer').startup(function(use)
     'neovim/nvim-lspconfig',
     config = profile.lspconfig.config,
     after = {
-      'mason-lspconfig.nvim'
+      'mason-lspconfig.nvim',
     }
   }
 
-
+  -- Syntax highlighting for a bunch of the languages
   use {
     'sheerun/vim-polyglot'
   }
 
+  -- Syntax highlight for svelte
   use {
     'evanleck/vim-svelte',
     requires = {
@@ -97,6 +99,18 @@ return require('packer').startup(function(use)
       'vim-polyglot'
     }
   }
+
+  -- Core plugin for autocompletion 
+  use {
+    'hrsh7th/nvim-cmp',
+    config = profile.nvim_cmp.config
+  }
+
+  -- Plugin for automcompletion which sources data from lsp
+  use {
+    'hrsh7th/cmp-nvim-lsp',
+  }
+
 
   -- Automatically set up your configuration after cloning packer.nvim
   -- Put this at the end after all plugins

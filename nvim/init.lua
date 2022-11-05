@@ -6,6 +6,8 @@ opt.tabstop = 2
 opt.expandtab = true
 opt.smartindent = true
 opt.number = true
+opt.cmdheight = 0
+opt.wrap = false
 
 -- highlight yanked text for 200ms using the "Visual" highlight group
 vim.cmd([[

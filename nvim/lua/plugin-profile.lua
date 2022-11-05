@@ -96,6 +96,11 @@ profile.lspconfig = {
     if svelte then
       svelte.setup({ on_attach = on_attach })
     end
+
+    local tsserver = lspconfig.tsserver
+    if tsserver then
+      tsserver.setup({ on_attach = on_attach })
+    end
   end
 }
 
@@ -117,5 +122,51 @@ profile.mason_lspconfig = {
     mason_lspconfig.setup()
   end
 }
+
+profile.nvim_cmp = {
+  config = function ()
+    local cmp = require('cmp')
+    if not cmp then return end
+
+    cmp.setup {
+      snippet = {
+        expand = function(args)
+          luasnip.lsp_expand(args.body)
+        end,
+      },
+      mapping = cmp.mapping.preset.insert({
+          ['<C-d>'] = cmp.mapping.scroll_docs(-4),
+          ['<C-u>'] = cmp.mapping.scroll_docs(4),
+          ['<C-Space>'] = cmp.mapping.complete(),
+          ['<CR>'] = cmp.mapping.confirm {
+            behavior = cmp.ConfirmBehavior.Replace,
+            select = true,
+          },
+          ['<Tab>'] = cmp.mapping(function(fallback)
+            if cmp.visible() then
+              cmp.select_next_item()
+            elseif luasnip.expand_or_jumpable() then
+              luasnip.expand_or_jump()
+            else
+              fallback()
+            end
+          end, { 'i', 's' }),
+        ['<S-Tab>'] = cmp.mapping(function(fallback)
+          if cmp.visible() then
+            cmp.select_prev_item()
+          elseif luasnip.jumpable(-1) then
+            luasnip.jump(-1)
+          else
+            fallback()
+          end
+        end, { 'i', 's' }),
+    }),
+  sources = {
+    { name = 'nvim_lsp' },
+  },
+}
+  end
+}
+
 
 return profile
